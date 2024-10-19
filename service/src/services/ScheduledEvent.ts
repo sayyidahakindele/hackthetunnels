@@ -11,11 +11,6 @@ export const getFirst = async (
       term: {
         contains: "Winter 2025 (January-April)",
       },
-      course: {
-        subjectCode: {
-          contains: "COMP",
-        },
-      },
     },
     include: {
       course: true,
@@ -24,3 +19,4 @@ export const getFirst = async (
 
   return Ok(events);
 };
+
