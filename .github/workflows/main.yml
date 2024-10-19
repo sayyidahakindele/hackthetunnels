@@ -1,9 +1,9 @@
-name: prettier
+name: CI
 'on':
- - pull
+  - pull
 jobs:
-   build:
-   runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Install modules
