@@ -14,50 +14,63 @@ import "./BuildTimetable.style.scss";
 
 function BuildTimetable() {
   const { jwt } = useAccountContext();
+  const [searchValue, setSearchValue] = useState(''); 
   const [scheduledEvents, setScheduledEvents] = useState<ScheduledEvent[]>([]);
   const [selectedEvents, setSelectedEvents] = useState<ScheduledEvent[]>([]);
   const navigate = useNavigate();
-
-  const fetchScheduledEvents = async () => {
-    const result = await ServiceAPI.fetchScheduledEvents();
-    setScheduledEvents(result);
-  };
-
   const [ttName, setTTName] = useState('');
 
+  // Fetch scheduled events based on the program input
+  const fetchScheduledEvents = async (program: string) => {
+    try {
+      const result = await ServiceAPI.fetchScheduledEvents(program);
+      setScheduledEvents(result);
+    } catch (error) {
+      console.error('Error fetching scheduled events:', error);
+    }
+  };
+
   const createTimetable = async () => {
-    const result = await ServiceAPI.createTimetable(
-      ttName,
-      selectedEvents.map((event) => event.id.toString()),
-      jwt,
-    );
-    navigate(`/timetables/${result.data.id}`);
+    try {
+      const result = await ServiceAPI.createTimetable(
+        ttName,
+        selectedEvents.map((event) => event.id.toString()),
+        jwt,
+      );
+      navigate(`/timetables/${result.data.id}`);
+    } catch (error) {
+      console.error('Error creating timetable:', error);
+    }
   };
 
   const addEvent = (event: ScheduledEvent) => {
-    setSelectedEvents([...selectedEvents, event]);
+    setSelectedEvents((prevSelected) => [...prevSelected, event]);
   };
 
   const removeEvent = (event: ScheduledEvent) => {
-    setSelectedEvents(selectedEvents.filter((e) => e.id !== event.id));
+    setSelectedEvents((prevSelected) => prevSelected.filter((e) => e.id !== event.id));
   };
-
 
   return (
     <Layout title={"My Course Worksheet: Is it Pink or Green?"}><img src="https://png.pngtree.com/png-clipart/20240514/original/pngtree-cute-thinking-emoji-png-image_15086037.png" width="80" height="80"/>
       <div className="BuildTimetable">
         <Section title="Search">
-          <SearchSection onSearch={fetchScheduledEvents} />
+          <SearchSection 
+            onSearch={fetchScheduledEvents} 
+            searchValue={searchValue} 
+            setSearchValue={setSearchValue} 
+          />
         </Section>
+
         {scheduledEvents.length > 0 && (
           <Section title="Results">
             <ResultsSection
               scheduledEvents={scheduledEvents}
               addEvent={addEvent}
             />
-          
           </Section>
         )}
+
         {selectedEvents.length > 0 && (
           <Section title="Worksheet">
             <WorksheetSection
@@ -66,12 +79,17 @@ function BuildTimetable() {
               createTimetable={createTimetable}
             />
             <p>Name your timetable</p>
-            <input type="text" onChange={event => setTTName(event.target.value)}/>
-            <button onClick={() => setTTName(ttName)}>
-              Enter
+            <input 
+              type="text" 
+              onChange={event => setTTName(event.target.value)} 
+              value={ttName} // Ensure controlled input
+            />
+            <button onClick={createTimetable}>
+              Create Timetable
             </button>
           </Section>
         )}
+
         <Section title="Draft Timetable">
           <TimetableSection
             selectedEvents={selectedEvents.map((event: ScheduledEvent) =>

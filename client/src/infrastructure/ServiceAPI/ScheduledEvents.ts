@@ -23,10 +23,11 @@ export interface ScheduledEvent {
   };
 }
 
-export const fetchScheduledEvents = async (): Promise<ScheduledEvent[]> => {
+export const fetchScheduledEvents = async (searchCourseCode?: string): Promise<ScheduledEvent[]> => {
   const response = await fetch(
-    `${import.meta.env.VITE_API_ROOT}/api/v1/scheduledEvents`,
+    `${import.meta.env.VITE_API_ROOT}/api/v1/scheduledEvents?courseCode=${encodeURIComponent(searchCourseCode)}`,
   );
+
   const json = await response.json();
 
   if (json.error) {
@@ -34,7 +35,10 @@ export const fetchScheduledEvents = async (): Promise<ScheduledEvent[]> => {
   }
 
   const data = formatScheduledEvents(json.data);
-  return data;
+
+  const filtered = data.filter(event => event.course.subjectCode.toLowerCase().includes(searchCourseCode.toLowerCase()))
+  console.log(filtered)
+  return filtered;
 };
 
 const formatScheduledEvents = (events: any[]): ScheduledEvent[] => {
