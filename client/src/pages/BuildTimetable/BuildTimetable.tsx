@@ -23,13 +23,14 @@ function BuildTimetable() {
     setScheduledEvents(result);
   };
 
+  const [ttName, setTTName] = useState('');
+
   const createTimetable = async () => {
     const result = await ServiceAPI.createTimetable(
-      new Date().toISOString(),
+      ttName,
       selectedEvents.map((event) => event.id.toString()),
       jwt,
     );
-
     navigate(`/timetables/${result.data.id}`);
   };
 
@@ -40,6 +41,7 @@ function BuildTimetable() {
   const removeEvent = (event: ScheduledEvent) => {
     setSelectedEvents(selectedEvents.filter((e) => e.id !== event.id));
   };
+
 
   return (
     <Layout title={"My Course Worksheet"}>
@@ -53,6 +55,7 @@ function BuildTimetable() {
               scheduledEvents={scheduledEvents}
               addEvent={addEvent}
             />
+          
           </Section>
         )}
         {selectedEvents.length > 0 && (
@@ -62,6 +65,11 @@ function BuildTimetable() {
               removeEvent={removeEvent}
               createTimetable={createTimetable}
             />
+            <p>Name your timetable</p>
+            <input type="text" onChange={event => setTTName(event.target.value)}/>
+            <button onClick={() => setTTName(ttName)}>
+              Enter
+            </button>
           </Section>
         )}
         <Section title="Draft Timetable">
