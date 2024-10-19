@@ -44,7 +44,7 @@ function BuildTimetable() {
 
 
   return (
-    <Layout title={"My Course Worksheet"}>
+    <Layout title={"My Course Worksheet: Is it Pink or Green?"}><img src="https://png.pngtree.com/png-clipart/20240514/original/pngtree-cute-thinking-emoji-png-image_15086037.png" width="80" height="80"/>
       <div className="BuildTimetable">
         <Section title="Search">
           <SearchSection onSearch={fetchScheduledEvents} />
