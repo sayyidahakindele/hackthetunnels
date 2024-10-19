@@ -9,6 +9,7 @@ export enum Days {
   Thursday = "Thursday",
   Friday = "Friday",
   Saturday = "Saturday",
+ 
 }
 
 export interface CalendarBlock {
