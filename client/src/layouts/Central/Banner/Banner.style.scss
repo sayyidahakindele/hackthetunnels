@@ -1,12 +1,18 @@
 @import "../../../globals.scss";
 
+
+
 .Banner {
+  @keyframes fade {
+    from {background-color:#ed61a4;}
+    to {background-color: #618f63;}
+  }
+
   padding: 0.75rem;
   width: 100%;
   display: flex;
   align-items: center;
   height: 3rem;
-  background-color: $theme;
   gap: 2rem;
 
   img {
@@ -25,4 +31,10 @@
     color: white;
     font-size: 1.6rem;
   }
+
+  background-color: #ed61a4;
+  animation-name: fade;
+  animation-duration: 5s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
 }
