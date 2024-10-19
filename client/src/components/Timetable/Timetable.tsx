@@ -1,4 +1,5 @@
 import "./Timetable.style.scss";
+import React, {useState } from "react";
 
 export enum Days {
   Sunday = "Sunday",
@@ -29,6 +30,13 @@ function Timetable({ events }: TimetableProps) {
       event.startTime !== "NA" &&
       event.endTime !== "NA",
   );
+
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // Function to handle the button click and populate the div
+  const popUp = (event) => {
+    setSelectedEvent(event); // Set the clicked event as the selected event
+  };
 
   return (
     <div className="Timetable">
@@ -78,7 +86,7 @@ function Timetable({ events }: TimetableProps) {
                     >
                       {eventsForCell.map((event, index) => (
                         <div key={index} className="Timetable__event">
-                          <span className="event-label">{event.label}</span>
+                          <button onClick={() => popUp(event)} className="event-label">{event.label}</button>
                         </div>
                       ))}
                     </td>
@@ -89,6 +97,18 @@ function Timetable({ events }: TimetableProps) {
           })}
         </tbody>
       </table>
+      <div>
+        {selectedEvent ? (
+            <div>
+              <h2>Details</h2>
+              <h4>Name:{selectedEvent.label}</h4>
+              <p>Days: {selectedEvent.days[0]}, {selectedEvent.days[1]}</p>
+              <p>Time: {selectedEvent.startTime} - {selectedEvent.endTime}</p>
+            </div>
+          ) : (
+            <p>Select an event to see details.</p>
+          )}
+      </div>
     </div>
   );
 }
