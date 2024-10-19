@@ -12,4 +12,5 @@ jobs:
         npm install
     - name: Run Prettier
       run: |
+        cd service
         npm run check
