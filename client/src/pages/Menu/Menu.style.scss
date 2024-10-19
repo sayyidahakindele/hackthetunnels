@@ -1,11 +1,8 @@
-/* Default styles (light mode) */
 body {
     background-color: white;
     color: black;
 }
 
-
-/* Light mode styles (optional but can be explicit) */
 @media (prefers-color-scheme: light) {
     body {
         background-color: white;
